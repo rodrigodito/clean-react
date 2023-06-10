@@ -18,5 +18,13 @@
     "@typescript-eslint/prefer-nullish-coalescing": "off",
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["*.tsx" ],
+      "rules": {
+        "@typescript-eslint/explicit-function-return-type": "off"
+      }
+    }
+  ]
 }
