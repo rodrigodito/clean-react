@@ -1,15 +1,13 @@
 import React from 'react'
 import S from './login-styles.scss'
 import { Spinner } from '@/presentation/components/Spinner'
-import { Logo } from '@/presentation/components/Logo/Logo'
+import LoginHeader from '@/presentation/components/LoginHeader'
+import Footer from '@/presentation/components/Footer'
 
 export function Login () {
   return (
     <div className={S.login}>
-      <header className={S.header}>
-        <Logo />
-        <h1>Enquetes para programadores</h1>
-      </header>
+      <LoginHeader />
       <form className={S.form} action="">
         <h2>Login</h2>
         <div className={S.inputWrap}>
@@ -27,7 +25,7 @@ export function Login () {
           <span className={S.error}>Erro</span>
         </div>
       </form>
-      <footer className={S.footer} />
+      <Footer />
     </div>
   )
 }
