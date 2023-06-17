@@ -7,7 +7,7 @@ type Props = {
 
 export function Spinner (props: Props) {
   return (
-    <div className={[S.spinner, props.className].join(' ')}>
+    <div data-testid="spinner" className={[S.spinner, props.className].join(' ')}>
       <div />
       <div />
       <div />

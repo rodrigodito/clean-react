@@ -21,6 +21,14 @@ export function Login ({ validation }: LoginProps) {
     mainError: ''
   })
 
+  function handleSubmit (event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    setState({
+      ...state,
+      isLoading: true
+    })
+  }
+
   useEffect(() => {
     setState({
       ...state,
@@ -33,7 +41,7 @@ export function Login ({ validation }: LoginProps) {
     <div className={S.login}>
       <LoginHeader />
       <Context.Provider value={{ state, setState }}>
-        <form className={S.form} action="">
+        <form className={S.form} onSubmit={handleSubmit}>
           <h2>Login</h2>
           <Input type="email" name='email' placeholder='Digite seu email' />
           <Input type="password" name='password' placeholder='Digite sua senha' />
