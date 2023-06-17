@@ -6,21 +6,21 @@ import { Input } from '@/presentation/components/Input'
 import { FormStatus } from '@/presentation/components/FormStatus'
 import Context from '@/presentation/contexts/form/form-context'
 
-type stateProps = {
-  isLoading: boolean
-  errorMessage: string
-}
-
 export function Login () {
-  const [state] = useState<stateProps>({
-    isLoading: false,
-    errorMessage: ''
+  const [state] = useState({
+    isLoading: false
+  })
+
+  const [errorState] = useState({
+    email: 'Campo obrigatório',
+    password: 'Campo obrigatório',
+    main: ''
   })
 
   return (
     <div className={S.login}>
       <LoginHeader />
-      <Context.Provider value={state}>
+      <Context.Provider value={{ state, errorState }}>
         <form className={S.form} action="">
           <h2>Login</h2>
           <Input type="email" name='email' placeholder='Digite seu email' />
