@@ -23,11 +23,11 @@ export function Input (props: Props) {
   }
 
   function getStatus () {
-    return '🔴'
+    return error ? '🔴' : '🟢'
   }
 
   function getTitle (): string {
-    return error
+    return error || 'Tudo certo!'
   }
 
   return (
