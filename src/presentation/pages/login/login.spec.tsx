@@ -3,21 +3,39 @@ import { type RenderResult, render, fireEvent, cleanup } from '@testing-library/
 import { Login } from './login'
 import { ValidationStub } from '@/presentation/test'
 import { faker } from '@faker-js/faker'
+import { type AuthenticationParams, type Authentication } from '@/domain/usecases'
+import { type AccountModel } from '@/domain/models'
+import { mockAccountModel } from '@/domain/test'
 
 type SutTypes = {
   sut: RenderResult
+  authenticationSpy: AuthenticationSpy
 }
 
 type SutParams = {
   validationError: string
 }
 
+class AuthenticationSpy implements Authentication {
+  account = mockAccountModel()
+  params: AuthenticationParams
+
+  async auth (params: AuthenticationParams): Promise<AccountModel> {
+    this.params = params
+    return await Promise.resolve(this.account)
+  }
+}
+
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
   validationStub.errorMessage = params?.validationError
-  const sut = render(<Login validation={validationStub} />)
+
+  const authenticationSpy = new AuthenticationSpy()
+
+  const sut = render(<Login validation={validationStub} authentication={authenticationSpy} />)
   return {
-    sut
+    sut,
+    authenticationSpy
   }
 }
 
@@ -120,5 +138,25 @@ describe('Login Component', () => {
 
     const spinner = sut.getByTestId('spinner')
     expect(spinner).toBeTruthy()
+  })
+
+  test('Should call Authentication with correct values', () => {
+    const { sut, authenticationSpy } = makeSut()
+    const fakeEmail = faker.internet.email()
+    const fakePassword = faker.internet.password()
+
+    const emailInput = sut.getByTestId('email')
+    fireEvent.input(emailInput, { target: { value: fakeEmail } })
+
+    const passwordInput = sut.getByTestId('password')
+    fireEvent.input(passwordInput, { target: { value: fakePassword } })
+
+    const submitButton = sut.getByTestId('submit')
+    fireEvent.click(submitButton)
+
+    expect(authenticationSpy.params).toEqual({
+      email: fakeEmail,
+      password: fakePassword
+    })
   })
 })
