@@ -1,19 +1,35 @@
 import React from 'react'
-import { type RenderResult, render } from '@testing-library/react'
+import { type RenderResult, render, fireEvent, cleanup } from '@testing-library/react'
 import { Login } from './login'
+import { type Validation } from '@/presentation/protocols/validation'
 
 type SutTypes = {
   sut: RenderResult
+  validationSpy: ValidationSpy
+}
+
+class ValidationSpy implements Validation {
+  errorMessage: string
+  input: object
+
+  validate (input: object): string {
+    this.input = input
+    return this.errorMessage
+  }
 }
 
 const makeSut = (): SutTypes => {
-  const sut = render(<Login />)
+  const validationSpy = new ValidationSpy()
+  const sut = render(<Login validation={validationSpy} />)
   return {
-    sut
+    sut,
+    validationSpy
   }
 }
 
 describe('Login Component', () => {
+  afterEach(cleanup)
+
   test('Should start with initial state', () => {
     const { sut } = makeSut()
 
@@ -30,5 +46,23 @@ describe('Login Component', () => {
     const passwordInputStatus = sut.getByTestId('password-status')
     expect(passwordInputStatus.title).toBe('Campo obrigatório')
     expect(passwordInputStatus.textContent).toBe('🔴')
+  })
+
+  test('Should call validation with correct email', () => {
+    const { sut, validationSpy } = makeSut()
+    const emailInput = sut.getByTestId('email')
+    fireEvent.input(emailInput, { target: { value: 'any_email' } })
+    expect(validationSpy.input).toEqual({
+      email: 'any_email'
+    })
+  })
+
+  test('Should call validation with correct password', () => {
+    const { sut, validationSpy } = makeSut()
+    const passwordInput = sut.getByTestId('password')
+    fireEvent.input(passwordInput, { target: { value: 'any_password' } })
+    expect(validationSpy.input).toEqual({
+      password: 'any_password'
+    })
   })
 })
