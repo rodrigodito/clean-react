@@ -3,8 +3,6 @@ import { Routes, Route, BrowserRouter } from 'react-router-dom'
 
 import { Login } from '@/presentation/pages/login/login'
 
-import '@/presentation/styles/global.scss'
-
 export function Router () {
   return (
     <BrowserRouter>
