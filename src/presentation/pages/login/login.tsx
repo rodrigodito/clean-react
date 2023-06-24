@@ -24,17 +24,25 @@ export function Login ({ validation, authentication }: LoginProps) {
   })
 
   async function handleSubmit () {
-    if (state.isLoading || state.emailError || state.passwordError) return
+    try {
+      if (state.isLoading || state.emailError || state.passwordError) return
 
-    setState({
-      ...state,
-      isLoading: true
-    })
+      setState({
+        ...state,
+        isLoading: true
+      })
 
-    await authentication.auth({
-      email: state.email,
-      password: state.password
-    })
+      await authentication.auth({
+        email: state.email,
+        password: state.password
+      })
+    } catch (e) {
+      setState({
+        ...state,
+        isLoading: false,
+        mainError: e.message
+      })
+    }
   }
 
   useEffect(() => {

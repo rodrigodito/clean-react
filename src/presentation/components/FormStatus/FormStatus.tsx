@@ -10,7 +10,7 @@ export function FormStatus () {
   return (
     <div data-testid="error-wrap" className={S.errorWrap}>
       {state.isLoading && <Spinner className={S.spinner} /> }
-      {state.mainError && <span className={S.error}>{state.mainError}</span>}
+      {state.mainError && <span data-testid="main-error" className={S.error}>{state.mainError}</span>}
     </div>
   )
 }
