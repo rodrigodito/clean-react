@@ -24,7 +24,7 @@ export function Login ({ validation, authentication }: LoginProps) {
   })
 
   async function handleSubmit () {
-    if (state.isLoading) return
+    if (state.isLoading || state.emailError || state.passwordError) return
 
     setState({
       ...state,
@@ -49,7 +49,7 @@ export function Login ({ validation, authentication }: LoginProps) {
     <div className={S.login}>
       <LoginHeader />
       <Context.Provider value={{ state, setState }}>
-        <form className={S.form} onSubmit={handleSubmit}>
+        <form data-testid="form" className={S.form} onSubmit={handleSubmit}>
           <h2>Login</h2>
           <Input type="email" name='email' placeholder='Digite seu email' />
           <Input type="password" name='password' placeholder='Digite sua senha' />
