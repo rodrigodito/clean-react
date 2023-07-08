@@ -1,6 +1,6 @@
 import React from 'react'
 import { type RenderResult, render, fireEvent, cleanup, waitFor } from '@testing-library/react'
-import { Login } from './login'
+import { Login } from '@/presentation/pages/login'
 import { AuthenticationSpy, ValidationStub } from '@/presentation/test'
 import { faker } from '@faker-js/faker'
 import { InvalidCredentialsError } from '@/domain/errors'
