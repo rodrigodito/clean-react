@@ -1,13 +1,15 @@
 import React from 'react'
 import { Routes, Route, BrowserRouter } from 'react-router-dom'
 
-import { Login } from '@/presentation/pages/login/login'
+type Props = {
+  makeLogin: React.ReactNode
+}
 
-export function Router () {
+export function Router ({ makeLogin }: Props) {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/login' index element={<Login />} />
+        <Route path='/login' index element={makeLogin} />
       </Routes>
     </BrowserRouter>
   )
