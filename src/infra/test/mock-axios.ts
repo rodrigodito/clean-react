@@ -6,7 +6,6 @@ export const mockAxios = (): jest.Mocked<typeof axios> => {
   mockedAxios.post.mockResolvedValue({
     data: faker.internet.userName(),
     status: faker.internet.httpStatusCode
-
   })
   return mockedAxios
 }

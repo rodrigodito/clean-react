@@ -23,7 +23,9 @@ export function Login ({ validation, authentication }: LoginProps) {
     mainError: ''
   })
 
-  async function handleSubmit () {
+  async function handleSubmit (event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+
     try {
       if (state.isLoading || state.emailError || state.passwordError) return
 
@@ -33,11 +35,12 @@ export function Login ({ validation, authentication }: LoginProps) {
       })
 
       const account = await authentication.auth({
-        email: state.email,
+        identifier: state.email,
         password: state.password
       })
 
-      localStorage.setItem('accessToken', account.accessToken)
+      localStorage.setItem('accessToken', account.jwt)
+      window.location.href = '/'
     } catch (e) {
       setState({
         ...state,

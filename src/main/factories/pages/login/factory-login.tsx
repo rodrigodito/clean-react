@@ -11,7 +11,7 @@ export function MakeLogin () {
   const removeAuthentication = new RemoteAuthentication(url, axiosHttpClient)
 
   const validationComposite = ValidationComposite.build([
-    ...ValidationBuilder.field('identifier').required().build(),
+    ...ValidationBuilder.field('email').email().required().build(),
     ...ValidationBuilder.field('password').required().min(5).build()
   ])
 

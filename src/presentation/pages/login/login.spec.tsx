@@ -139,7 +139,7 @@ describe('Login Component', () => {
     simulateValidSubmit(sut, fakeEmail, fakePassword)
 
     expect(authenticationSpy.params).toEqual({
-      email: fakeEmail,
+      identifier: fakeEmail,
       password: fakePassword
     })
   })
@@ -185,6 +185,6 @@ describe('Login Component', () => {
     simulateValidSubmit(sut)
     await waitFor(() => sut.getByTestId('form'))
 
-    expect(localStorage.setItem).toHaveBeenCalledWith('accessToken', authenticationSpy.account.accessToken)
+    expect(localStorage.setItem).toHaveBeenCalledWith('accessToken', authenticationSpy.account.jwt)
   })
 })
