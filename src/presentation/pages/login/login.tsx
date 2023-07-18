@@ -6,14 +6,15 @@ import { Input } from '@/presentation/components/Input'
 import { FormStatus } from '@/presentation/components/FormStatus'
 import Context from '@/presentation/contexts/form/form-context'
 import { type Validation } from '@/presentation/protocols/validation'
-import { type Authentication } from '@/domain/usecases'
+import { type Authentication, type SaveAccessToken } from '@/domain/usecases'
 
 type LoginProps = {
   validation: Validation
   authentication: Authentication
+  saveAccessToken: SaveAccessToken
 }
 
-export function Login ({ validation, authentication }: LoginProps) {
+export function Login ({ validation, authentication, saveAccessToken }: LoginProps) {
   const [state, setState] = useState({
     isLoading: false,
     email: '',
@@ -39,7 +40,7 @@ export function Login ({ validation, authentication }: LoginProps) {
         password: state.password
       })
 
-      localStorage.setItem('accessToken', account.jwt)
+      await saveAccessToken.save(account.jwt)
       window.location.href = '/'
     } catch (e) {
       setState({
