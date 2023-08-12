@@ -7,6 +7,7 @@ import { FormStatus } from '@/presentation/components/FormStatus'
 import Context from '@/presentation/contexts/form/form-context'
 import { type Validation } from '@/presentation/protocols/validation'
 import { type Authentication, type SaveAccessToken } from '@/domain/usecases'
+import { SubmitButton } from '@/presentation/components/SubmitButton'
 
 type LoginProps = {
   validation: Validation
@@ -17,6 +18,7 @@ type LoginProps = {
 export function Login ({ validation, authentication, saveAccessToken }: LoginProps) {
   const [state, setState] = useState({
     isLoading: false,
+    isFormInvalid: true,
     email: '',
     password: '',
     emailError: '',
@@ -28,7 +30,7 @@ export function Login ({ validation, authentication, saveAccessToken }: LoginPro
     event.preventDefault()
 
     try {
-      if (state.isLoading || state.emailError || state.passwordError) return
+      if (state.isLoading || state.isFormInvalid) return
 
       setState({
         ...state,
@@ -43,19 +45,23 @@ export function Login ({ validation, authentication, saveAccessToken }: LoginPro
       await saveAccessToken.save(account.jwt)
       window.location.href = '/'
     } catch (e) {
-      setState({
-        ...state,
+      setState(prevState => ({
+        ...prevState,
         isLoading: false,
         mainError: e.message
-      })
+      }))
     }
   }
 
   useEffect(() => {
+    const emailError = validation.validate('email', state.email)
+    const passwordError = validation.validate('password', state.password)
+
     setState({
       ...state,
-      emailError: validation.validate('email', state.email),
-      passwordError: validation.validate('password', state.password)
+      emailError,
+      passwordError,
+      isFormInvalid: !!emailError || !!passwordError
     })
   }, [state.email, state.password])
 
@@ -67,7 +73,7 @@ export function Login ({ validation, authentication, saveAccessToken }: LoginPro
           <h2>Login</h2>
           <Input type="email" name='email' placeholder='Digite seu email' />
           <Input type="password" name='password' placeholder='Digite sua senha' />
-          <button data-testid="submit" disabled={!!state.emailError || !!state.passwordError} className={S.submit}>Entrar</button>
+          <SubmitButton text='entrar'/>
           <span className={S.link}>Criar conta</span>
           <FormStatus />
         </form>
