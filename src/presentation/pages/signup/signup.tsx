@@ -29,16 +29,20 @@ export function SignUp ({ validation, addAccount }: Props) {
 
   async function handleSubmit (event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (state.isLoading || state.nameError || state.emailError || state.passwordError || state.passwordConfirmationError) {
-      return null
+    try {
+      if (state.isLoading || state.nameError || state.emailError || state.passwordError || state.passwordConfirmationError) {
+        return null
+      }
+      setState(prevState => ({ ...prevState, isLoading: true }))
+      await addAccount.add({
+        name: state.name,
+        email: state.email,
+        password: state.password,
+        passwordConfirmation: state.passwordConfirmation
+      })
+    } catch (e) {
+      setState(prevState => ({ ...prevState, isLoading: false, mainError: e.message }))
     }
-    setState(prevState => ({ ...prevState, isLoading: true }))
-    await addAccount.add({
-      name: state.name,
-      email: state.email,
-      password: state.password,
-      passwordConfirmation: state.passwordConfirmation
-    })
   }
 
   useEffect(() => {
