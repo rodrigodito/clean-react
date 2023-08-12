@@ -29,7 +29,7 @@ export function SignUp ({ validation, addAccount }: Props) {
 
   async function handleSubmit (event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (state.isLoading) {
+    if (state.isLoading || state.nameError || state.emailError || state.passwordError || state.passwordConfirmationError) {
       return null
     }
     setState(prevState => ({ ...prevState, isLoading: true }))
