@@ -25,21 +25,26 @@ export function SignUp ({ validation }: Props) {
     mainError: ''
   })
 
+  function handleSubmit (event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    setState(prevState => ({ ...prevState, isLoading: true }))
+  }
+
   useEffect(() => {
-    setState({
-      ...state,
+    setState(prevState => ({
+      ...prevState,
       nameError: validation.validate('name', state.name),
       emailError: validation.validate('email', state.email),
       passwordError: validation.validate('password', state.password),
       passwordConfirmationError: validation.validate('passwordConfirmation', state.passwordConfirmation)
-    })
+    }))
   }, [state.name, state.email, state.password, state.passwordConfirmation])
 
   return (
     <div className={Styles.signup}>
       <LoginHeader />
       <Context.Provider value={{ state, setState }}>
-        <form className={Styles.form}>
+        <form className={Styles.form} data-testid="form" onSubmit={handleSubmit}>
           <h2>Login</h2>
           <Input type="text" name="name" placeholder="Digite seu nome"/>
           <Input type="email" name="email" placeholder="Digite seu e-mail"/>
