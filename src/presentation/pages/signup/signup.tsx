@@ -29,6 +29,9 @@ export function SignUp ({ validation, addAccount }: Props) {
 
   async function handleSubmit (event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    if (state.isLoading) {
+      return null
+    }
     setState(prevState => ({ ...prevState, isLoading: true }))
     await addAccount.add({
       name: state.name,
