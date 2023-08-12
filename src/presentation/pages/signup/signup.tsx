@@ -6,14 +6,15 @@ import LoginHeader from '@/presentation/components/LoginHeader'
 import { Input } from '@/presentation/components/Input'
 import { FormStatus } from '@/presentation/components/FormStatus'
 import { type Validation } from '@/presentation/protocols/validation'
-import { type AddAccount } from '@/domain/usecases'
+import { type SaveAccessToken, type AddAccount } from '@/domain/usecases'
 
 type Props = {
   validation: Validation
   addAccount: AddAccount
+  saveAccessToken: SaveAccessToken
 }
 
-export function SignUp ({ validation, addAccount }: Props) {
+export function SignUp ({ validation, addAccount, saveAccessToken }: Props) {
   const [state, setState] = useState({
     isLoading: false,
     name: '',
@@ -34,12 +35,15 @@ export function SignUp ({ validation, addAccount }: Props) {
         return null
       }
       setState(prevState => ({ ...prevState, isLoading: true }))
-      await addAccount.add({
+      const account = await addAccount.add({
         name: state.name,
         email: state.email,
         password: state.password,
         passwordConfirmation: state.passwordConfirmation
       })
+
+      await saveAccessToken.save(account.jwt)
+      window.location.href = '/'
     } catch (e) {
       setState(prevState => ({ ...prevState, isLoading: false, mainError: e.message }))
     }
