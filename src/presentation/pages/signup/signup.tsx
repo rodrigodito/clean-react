@@ -6,12 +6,14 @@ import LoginHeader from '@/presentation/components/LoginHeader'
 import { Input } from '@/presentation/components/Input'
 import { FormStatus } from '@/presentation/components/FormStatus'
 import { type Validation } from '@/presentation/protocols/validation'
+import { type AddAccount } from '@/domain/usecases'
 
 type Props = {
   validation: Validation
+  addAccount: AddAccount
 }
 
-export function SignUp ({ validation }: Props) {
+export function SignUp ({ validation, addAccount }: Props) {
   const [state, setState] = useState({
     isLoading: false,
     name: '',
@@ -25,9 +27,15 @@ export function SignUp ({ validation }: Props) {
     mainError: ''
   })
 
-  function handleSubmit (event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit (event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setState(prevState => ({ ...prevState, isLoading: true }))
+    await addAccount.add({
+      name: state.name,
+      email: state.email,
+      password: state.password,
+      passwordConfirmation: state.passwordConfirmation
+    })
   }
 
   useEffect(() => {
